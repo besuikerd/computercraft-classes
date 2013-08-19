@@ -15,7 +15,7 @@ for i, file in ipairs(files) do
 	local handle = fs.open(file.path, "w")
 	local url = string.format("%s/%s", url_repo, file.file)
 	local request = http.get(url)
-	if not request then error(string.format("%s not found"), url) end
+	if not request then error(string.format("%s not found", url)) end
 	handle.write(request.readAll())
 	handle.close()
 	print(" done!")
