@@ -6,7 +6,7 @@ local url_repo = "https://github.com/besuikerd/computercraft-classes/raw/master/
 local files = {
 	{name = "settings", path = "class_settings", file = "class_settings.lua"},
 	{name = "class", path = "class", file = "class.lua"},
-	{name = "settings", path = "class_settings", file = "class_settings.lua"},
+	{name = "test", path = "class_test", file = "class_test.lua"},
 }
 
 --load necessary files
