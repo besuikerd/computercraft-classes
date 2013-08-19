@@ -1,3 +1,5 @@
+os.loadAPI("class")
+
 class("Animal")
 
 function Animal:__construct(movement)
