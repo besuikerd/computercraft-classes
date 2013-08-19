@@ -128,7 +128,7 @@ class = function(name)
 	if not name then error("No classname specified") end
 	
 	--check if class already exists
-	if _G[name] then error(string.format("Class %s already exists.", name)) end
+	--if _G[name] then error(string.format("Class %s already exists.", name)) end
 
 	--create class table
 	local instance = {
