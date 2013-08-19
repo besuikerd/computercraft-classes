@@ -1,11 +1,10 @@
-__class_settings = {
-	
+{	
 	--url of the repo
 	url = "https://github.com/besuikerd",
 	
 	--name of the repo
 	repo = "computercraft-classes",
 	
-	--
-	branch = "raw/master
+	--branch of the repo
+	branch = "raw/master",
 }
