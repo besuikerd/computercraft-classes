@@ -1,13 +1,12 @@
-local path_settings = "class_settings
+local path_settings = "class_settings"
 local path_api = "class"
 
-local url_repo = "https://github.com/besuikerd/computercraft-classes/blob/master/
+local url_repo = "https://github.com/besuikerd/computercraft-classes/blob/master/"
 
 local files = {
 	{name = "settings", path = "class_settings", file = "class_settings.lua"},
 	{name = "settings", path = "class_settings", file = "class_settings.lua"},
 	{name = "settings", path = "class_settings", file = "class_settings.lua"},
-	
 }
 
 --load necessary files
