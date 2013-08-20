@@ -122,7 +122,7 @@ ___Instance = {
 }
 
 --class constructor
-class = function(name)
+function class(name)
 
 	--check if name is set
 	if not name then error("No classname specified") end
@@ -146,9 +146,6 @@ class = function(name)
 	return instance
 end
 
---acces class function as global variable
-_G["class"] = class
-
 class("Object")
 
 function Object:toString()
@@ -161,3 +158,30 @@ function Object:vars(table)
 		self[k] = v
 	end
 end
+
+function Object:getClass()
+	return self.__cls
+end
+
+class("ClassLoader")
+
+--[[
+	loads a class
+	* check if class was already loaded before
+	* check if class is located locally
+	* check if class is located remotely in one of the repos
+	* when not found, throw an error
+	* execute classloading
+]]
+function ClassLoader:load(cls)
+	
+end
+
+function ClassLoader:forceUpdate(force)
+	self.force = force
+end
+
+--acces variables as global variables
+_G["class"] = class
+_G["classloader"] = ClassLoader:new()
+_G["force_load"] = classloader:forceUpdate
