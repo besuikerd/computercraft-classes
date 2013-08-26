@@ -1,8 +1,3 @@
---load settings
-local handle = fs.open("class_repos", "r")
-_G["__class_repos"] = textutils.unserialize(handle.readAll())
-handle.close()
-
 ___Class = nil
 
 --class prototype
@@ -26,7 +21,7 @@ ___Class = {
 		instance.__cls = self
 
 		--call constructor method
-		instance:__construct(...)
+		self.__construct(instance, ...)
 		
 		return instance
 	end,
@@ -62,7 +57,7 @@ ___Instance = {
 		* lookup in super class
 	]]
 	__index_key = function(table, key)
-		--print(tostring(rawget(table, "__name"))..": "..key)
+		print(tostring(rawget(table, "__name"))..": "..key)
 	
 		--lookup key in current table
 		local f = rawget(table, key)
@@ -146,92 +141,45 @@ function Object:getClass()
 	return self.__cls
 end
 
-class("ClassLoader")
+class("Person")
 
-function ClassLoader:__construct()
-	self.loadedClasses = {}
+function Person:__construct(name, surname)
+	print("constructor called!")
+	self.name = name
+	self.surname = surname
 end
 
---[[
-	loads a class
-	* check if class was already loaded before
-	* check if class is located locally
-	* check if class is located remotely in one of the repos
-	* when not found, throw an error
-	* execute classloading
-]]
-function ClassLoader:load(cls)
-
-	--check if class was already loaded before
-	if not self.loadedClasses[cls] then
-		
-		--convert dotted notation to uri
-		local path = string.gsub(cls, "%.", "/")
-		
-		--check if class is located locally when force is off
-		if not self.force and fs.exists(path) then
-			local handle = fs.open(path, "r")
-			local file = handle.readAll()
-			handle.close()
-			return self:loadClass(cls, file)
-		end
-		
-		--check if class is located remotely in one of the repos
-		for i, repo in ipairs(__class_repos) do
-			
-			--concatenate url, repo and branch
-			local url = string.format("%s/%s%s%s.lua", repo.url, repo.repo, not (repo.branch or repo.branch == "") and "" or "/"..repo.branch, path)
-			--print("url: "..url)
-			
-			local request = http.request(url)
-			local response = nil
-			while not response do
-				local event, url, handle = os.pullEvent()
-				if event == "http_success" or event == "http_failure" then
-					response = handle
-				end
-			end
-			
-			if response and response.getResponseCode() == 200 then 
-				return self:loadClass(cls, response.readAll())
-			end
-		end
-	end
+function Person:greet()
+	print(string.format("Hello I am a person and my name is %s %s", tostring(self.name), tostring(self.surname)))
 end
 
-function ClassLoader:loadClass(name, cls)
-	self.loadedClasses[name] = loadstring(cls)
-	if not self.loadedClasses[name] then error(string.format("Unable to load class %s", name)) end
-	
-	--execute class
-	self.loadedClasses[name]()
-	local path = string.gsub(name, "%.", "/")
-	
-	if not fs.exists(path) or self.force then
-		local pattern = "/[^/]*$"
-		local seperator = string.find(path, pattern)
-		local folder = string.sub(path, 1, seperator - 1)
-		local file = string.sub(path, seperator + 1)
-		
-		--create directory if it doesn't exist yet
-		if not fs.exists(folder) then
-			fs.makeDir(folder)
-		end
-		
-		--write file to computer
-		local handle = fs.open(path, "w")
-		handle.write(cls)
-		handle.close()
-	end
-	return self.loadedClasses[name]
+function Person:toString()
+	return string.format("Person[name=%s, surname=%s]")
 end
 
-function ClassLoader:forceUpdate(force)
-	self.force = force
+class("Heart")
+
+function Heart:beat()
+	print("I can feel my heartbeat")
 end
 
---acces variables as global variables
-_G["class"] = class
-_G["classloader"] = ClassLoader:new()
-_G["force_load"] = function(force) classloader.force = force end
-_G["import"] = function(cls) classloader:load(cls) end
+class("Brain")
+
+function Brain:think()
+	print("I am pondering...")
+end
+
+class "Student" 
+:extends(Person)
+:include(Brain, Heart)
+
+function Student:study()
+	print("I am studying")
+end
+
+local student = Student:new("Piet", "Piraat")
+
+student:study()
+student:greet()
+student:think()
+student:beat()

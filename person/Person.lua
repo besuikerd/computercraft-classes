@@ -6,7 +6,7 @@ function Person:__construct(name, surname)
 end
 
 function Person:greet()
-	print("Hello I am a person")
+	print(string.format("Hello I am a person and my name is %s %s", tostring(self.name), tostring(self.surname)))
 end
 
 function Person:toString()

@@ -1,10 +1,10 @@
 local path_settings = "class_settings"
 local path_api = "class"
 
-local url_repo = "https://raw.github.com/besuikerd/computercraft-classes/master/"
+local url_repo = "http://lua.besuikerd.nl/computercraft-classes"
 
 local files = {
-	{name = "settings", path = "class_settings", file = "class_settings.lua"},
+	{name = "repos", path = "class_repos", file = "class_repos.lua"},
 	{name = "classes", path = "classes", file = "classes.lua"},
 	{name = "test", path = "class_test", file = "class_test.lua"},
 }
