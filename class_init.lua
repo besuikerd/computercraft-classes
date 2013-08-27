@@ -7,7 +7,7 @@ local files = {
 	{name = "repos", path = "class_repos", file = "class_repos.lua"},
 	{name = "classes", path = "classes", file = "classes.lua"},
 	{name = "test", path = "class_test", file = "class_test.lua"},
-	{name = "command", path = "command" file = "command/CommandHandlerTest.lua"}
+	{name = "command", path = "command", file = "command/CommandHandlerTest.lua"},
 }
 
 --load necessary files
