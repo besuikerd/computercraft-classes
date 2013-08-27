@@ -100,6 +100,10 @@ ___Instance = {
 		
 		--recursively check super class
 		return f or rawget(table, "__super") and ___Instance.__index_super(table.__super, key)
+	end,
+	
+	__concat = function(pre, table)
+		
 	end
 
 }

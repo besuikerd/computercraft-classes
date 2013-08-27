@@ -2,7 +2,7 @@
 os.loadAPI("classes")
 
 --import Student class
-import("person.Student")
+import "person.Student"
 
 local student = Student:new("Piet", "Piraat")
 
