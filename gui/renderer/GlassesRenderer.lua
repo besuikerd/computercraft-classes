@@ -1,0 +1,60 @@
+import "gui.renderer.Renderer"
+
+class "GlassesRenderer" :extends(Renderer)
+
+
+function GlassesRenderer:__construct(bridge, scale)
+  if bridge then
+    if type(bridge) == "string" then
+      if peripheral.getType(bridge) == "openperipheral_glassesbridge" then
+        bridge = peripheral.wrap(bridge)
+      else
+        error(string.format("not a terminal glasses bridge on side %s", monitor))        
+      end
+    end
+    self.bridge = bridge
+  else
+    error("no bridge specified in GlassesRenderer constructor")
+  end
+  
+  self.scale = scale or 5
+end
+
+function GlassesRenderer:box(x, y, width, height, color, opacity)
+  self.bridge.addBox((x - 1) * self.scale, (y - 1) * self.scale * GlassesRenderer.correctionY, width * self.scale, height * self.scale * GlassesRenderer.correctionY, GlassesRenderer.color[color], opacity or 0.8)
+end
+
+function GlassesRenderer:text(x, y, text, color, bgColor)
+  self:box(x, y, #text, 1, bgColor or colors.black)
+  self.bridge.addText((x - 1) * self.scale, (y - 1) * self.scale * GlassesRenderer.correctionY, text, GlassesRenderer.color[color or colors.white])
+end
+
+function GlassesRenderer:size()
+  return self.scale * 220, self.scale * 140
+end
+
+function GlassesRenderer:clear()
+  self.bridge.clear()
+end
+
+GlassesRenderer.correctionY = 11 / 7
+
+--maps terminal colors to terminal glasses api colors
+GlassesRenderer.color = {}
+GlassesRenderer.color[colors.white] = 0xffffff
+GlassesRenderer.color[colors.orange] = 0xffa500
+GlassesRenderer.color[colors.magenta] =0xff00ff
+GlassesRenderer.color[colors.lightBlue] =0xadd8e6
+GlassesRenderer.color[colors.yellow] =0xffff00
+GlassesRenderer.color[colors.lime] =0x32cd32
+GlassesRenderer.color[colors.pink] =0xffc0cb
+GlassesRenderer.color[colors.gray] =0x808080
+GlassesRenderer.color[colors.lightGray] =0xd3d3d3
+GlassesRenderer.color[colors.cyan] =0x00ffff
+GlassesRenderer.color[colors.purple] =0x800080
+GlassesRenderer.color[colors.blue] =0x0000ff
+GlassesRenderer.color[colors.brown] =0xa52a2a
+GlassesRenderer.color[colors.green] =0x00ff00
+GlassesRenderer.color[colors.red] =0xff0000
+GlassesRenderer.color[colors.black] =0x000000
+GlassesRenderer.color = table.immutable(GlassesRenderer.color)

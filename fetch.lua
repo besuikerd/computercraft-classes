@@ -1,3 +1,0 @@
-local tArgs = {...}
-
-if #tArgs 

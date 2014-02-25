@@ -1,13 +1,14 @@
 local path_settings = "class_settings"
 local path_api = "class"
 
-local url_repo = "http://lua.besuikerd.nl/computercraft-classes"
+local url_repo = "http://lua/computercraft-classes"
 
 local files = {
 	{name = "repos", path = "class_repos", file = "class_repos.lua"},
 	{name = "classes", path = "classes", file = "classes.lua"},
 	{name = "test", path = "class_test", file = "class_test.lua"},
-	{name = "command", path = "command", file = "command/CommandHandlerTest.lua"},
+	{name = "command", path = "commander", file = "command/commander.lua"},
+	{name = "load", path = "load", file="load.lua"}
 }
 
 --load necessary files

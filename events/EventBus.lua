@@ -1,6 +1,6 @@
 class "EventBus"
 
-function EventBus:__construct
+function EventBus:__construct()
 	self.listeners = {}
 end
 
@@ -28,6 +28,5 @@ function EventBus:post(event, ...)
 	if not self.listeners[event] then return end
 	
 	for i, listener in ipairs(self.listener[event]) do
-		listener[](...)
 	end
 end

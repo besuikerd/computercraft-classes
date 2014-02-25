@@ -25,6 +25,18 @@ ___Class = {
 		--attach class reference to instance		
 		instance.__cls = self
 
+    --enforce constructor only being called once
+    local theCons = instance.__construct
+    local theParams = {...}
+    instance.__construct = function()
+      if not instance.__constructed then
+        theCons(instance, unpack(theParams))
+        instance.__constructed = true
+      else
+        error("constructor called twice")
+      end
+    end
+
 		--call constructor method
 		instance:__construct(...)
 		
@@ -66,6 +78,7 @@ ___Instance = {
 	
 		--lookup key in current table
 		local f = rawget(table, key)
+		
 		--wheter lookup was from a module or not
 		local moduled = nil
 		
@@ -122,6 +135,7 @@ function class(name)
 		__index = ___Class.__index,
 		__name = name,
 		__super = name == "Object" and nil or Object,
+		getName = function(self) return self.__name end,
 		__modules = {},
 	}
 	--inherit methods from ___Class	prototype
@@ -150,6 +164,22 @@ function Object:getClass()
 	return self.__cls
 end
 
+--enforce given table entries to be defined or throw and error
+function Object:enforce(entries)
+  local missing = {}
+  local isMissing = false
+  for k, v in pairs(entries) do
+    if not self[k] then
+      missing[k] = v
+      isMissing = true
+    end
+  end
+  
+  if(isMissing) then
+    error(string.format("some variables were not defined for %s, please define: \n%s", self.getClass(self):getName(), foldl(map(missing, function(v, k) return (k or "nil")..": "..v end), function(i, j) return i.."\n"..j end)))
+  end
+end
+
 class("ClassLoader")
 
 function ClassLoader:__construct()
@@ -165,7 +195,7 @@ end
 	* execute classloading
 ]]
 function ClassLoader:load(cls)
-
+  --print(string.format("loading class: %s", cls)) 
 	--check if class was already loaded before
 	if not self.loadedClasses[cls] then
 		
@@ -193,19 +223,25 @@ function ClassLoader:load(cls)
 				local event, url, handle = os.pullEvent()
 				if event == "http_success" or event == "http_failure" then
 					response = handle
+					if not response then error(string.format("%s not found on remote repository", cls)) end
 				end
 			end
 			
-			if response and response.getResponseCode() == 200 then 
+			if response.getResponseCode() == 200 then 
 				return self:loadClass(cls, response.readAll())
+			else
+			  for i,j in pairs(response) do
+			   print(i)
+			  end
 			end
 		end
 	end
 end
 
 function ClassLoader:loadClass(name, cls)
-	self.loadedClasses[name] = loadstring(cls)
-	if not self.loadedClasses[name] then error(string.format("Unable to load class %s", name)) end
+
+	self.loadedClasses[name], e = loadstring(cls)
+	if not self.loadedClasses[name] then error(string.format("Unable to load class %s: %s", name, e)) end
 	
 	--execute class
 	self.loadedClasses[name]()
@@ -239,3 +275,16 @@ _G["class"] = class
 _G["classloader"] = ClassLoader:new()
 _G["force_load"] = function(force) classloader.force = force end
 _G["import"] = function(cls) classloader:load(cls) end
+
+
+local old_force = classloader.force
+force_load(true)
+
+--global imports
+import "core.String"
+import "core.Functional"
+import "core.Table"
+import "core.Logger"
+import "core.Fs"
+
+force_load(old_force)

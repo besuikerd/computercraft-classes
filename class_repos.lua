@@ -1,6 +1,6 @@
 {
 	{
-		url = "http://lua.besuikerd.nl",
+		url = "http://lua",
 		
 		repo = "computercraft-classes",
 		
