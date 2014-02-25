@@ -10,7 +10,7 @@
 	
 	
 	{
-	 url = "https://raw.github.com/besuikerd/",
+	 url = "https://raw.github.com/besuikerd",
 	 
 	 repo = "computercraft-classes",
 	 
