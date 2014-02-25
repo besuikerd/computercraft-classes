@@ -6,9 +6,10 @@ local url_repo = "http://lua/computercraft-classes"
 local files = {
 	{name = "repos", path = "class_repos", file = "class_repos.lua"},
 	{name = "classes", path = "classes", file = "classes.lua"},
-	{name = "test", path = "class_test", file = "class_test.lua"},
-	{name = "command", path = "commander", file = "command/commander.lua"},
-	{name = "load", path = "load", file="load.lua"}
+	--{name = "command", path = "commander", file = "command/commander.lua"}, not using this atm
+	{name = "load", path = "load", file="programs/load.lua"},
+	{name = "reload", path = "reload", file="programs/reload.lua"},
+	{name = "superlua", path = "superlua", file="programs/superlua.lua"},
 }
 
 --load necessary files
@@ -24,3 +25,5 @@ for i, file in ipairs(files) do
 end
 
 
+
+os.loadAPI("classes")
