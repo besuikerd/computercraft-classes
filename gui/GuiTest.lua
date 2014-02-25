@@ -42,9 +42,13 @@ ui = Box:new{
     Square:new(11, 7, colors.red),
     Label:new{
       bgColor = colors.blue,
-      text = "test text test text",
+      text = gui.dynamic("someString")
     }
   }
+}
+
+model = {
+  someString = "start"
 }
 
 g = Gui:new{
@@ -53,12 +57,17 @@ g = Gui:new{
     TermRenderer:new(),
     GlassesRenderer:new("left", 5)
   },
-  root = ui
+  root = ui,
+  model = model
 }
 
 if true then
+  while true do
   g:clear()
+  model.someString = math.random(1, 100)
   g:render()
+  sleep(1)
+  end
 else
   while true do
     g:clear()

@@ -16,7 +16,7 @@ function Box:__construct(vars)
   deepMap(self.elements, function(element) element.parent = self end)
 end
 
-function Box:draw(renderer)
+function Box:draw(renderer, model)
   deepMap(self.elements, function(element)
     element.dx = self:absX()
     element.dy = self:absY()
@@ -25,7 +25,7 @@ function Box:draw(renderer)
 
   renderer:box(self:absX(), self:absY(), self.width, self.height, self.bgColor)
   deepMap(self.elements, function(element)
-    element:draw(renderer)
+    element:draw(renderer, model)
   end)
 end
 

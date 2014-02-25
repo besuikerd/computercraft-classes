@@ -12,11 +12,16 @@ function Label:__construct(vars)
   self:enforce{
     text = "text to be displayed on the label"
   }
+  if self.width == 0 then self.dynamicWidth = true end
+  if self.height == 0 then self.dynamicHeight = true end
   
-  if self.width == 0 then self.width = #self.text + 2 * self.marginX end
-  if self.height == 0 then self.height = 1 + 2 * self.marginY end
 end
 
-function Label:draw(renderer)
-  renderer:label(self:absX(), self:absY(), self.width, self.height, self.text, self.color, self.bgColor, self.marginX, self.marginY)
+function Label:draw(renderer, model)
+  local theText = tostring(gui.getDynamic(self.text, model))
+  
+  if self.dynamicWidth then self.width = #theText + 2 * self.marginX end
+  if self.dynamicHeight then self.height = 1 + 2 * self.marginY end
+  
+  renderer:label(self:absX(), self:absY(), self.width, self.height, theText, self.color, self.bgColor, self.marginX, self.marginY)
 end
