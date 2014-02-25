@@ -212,10 +212,8 @@ function ClassLoader:load(cls)
 		
 		--check if class is located remotely in one of the repos
 		for i, repo in ipairs(__class_repos) do
-			print("path: "..path)
 			--concatenate url, repo and branch
 			local url = string.format("%s/%s/%s%s.lua", repo.url, repo.repo, (repo.branch and #repo.branch > 0 and (repo.branch.."/")) or "", path)
-			print("url: "..url)
 			
 			local request = http.request(url)
 			local response = nil
