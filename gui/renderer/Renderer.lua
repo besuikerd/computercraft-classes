@@ -13,10 +13,9 @@ function Renderer:label(x, y, width, height, text, color, bgColor, paddingX, pad
   self:box(x, y, width, height, bgColor)
   local realWidth = width - paddingX * 2
   local lines = math.ceil(#text / realWidth)
-  print(x + (width - realWidth) / 2);
+  gui.debug("realwidth:%d, lines:%d", realWidth, lines)
   for i=1,lines do
-    print(string.sub(text, (i - 1)*realWidth + 1, i * realWidth))
-    self:text(x + (width - math.min(realWidth, #text)) / 2, y + (i - 1) + (height - lines - 2 * paddingY) / 2, string.sub(text, (i - 1)*realWidth + 1, i * realWidth), color, bgColor)
+    self:text(x + (width - math.min(realWidth, #text)) / 2, y + (i - 1) + (height - lines) / 2, string.sub(text, (i - 1)*realWidth + 1, i * realWidth), color, bgColor)
   end
 end
 
@@ -32,5 +31,3 @@ function Renderer:height()
   local width, height = self:size()
   return height
 end
-
-

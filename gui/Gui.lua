@@ -18,3 +18,13 @@ function Gui:render()
   
   self.root:draw(self.renderer)
 end
+
+gui = {}
+gui.logger = CompositeLogger:new{
+  FileLogger:new("logs/gui", Logger.Level.DEBUG),
+  Logger:new(Logger.Level.WARN)
+}
+gui.error = function(msg, ...) gui.logger:error(msg, ...) end
+gui.warn = function(msg, ...) gui.logger:warn(msg, ...) end
+gui.info = function(msg, ...) gui.logger:info(msg, ...) end
+gui.debug = function(msg, ...) gui.logger:debug(msg, ...) end

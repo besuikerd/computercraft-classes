@@ -8,7 +8,8 @@ import "gui.renderer.TermRenderer"
 import "gui.renderer.GlassesRenderer"
 import "gui.layout.HorizontalLayout"
 
-ui = Box:new{
+
+ui2 = Box:new{
   bgColor = colors.green,
   layout = HorizontalLayout:new(),
   elements = {
@@ -40,8 +41,8 @@ ui = Box:new{
   elements = {
     Square:new(11, 7, colors.red),
     Label:new{
-      text = "test",
-      marginX = 1,
+      bgColor = colors.blue,
+      text = "test text test text",
     }
   }
 }
@@ -55,7 +56,14 @@ g = Gui:new{
   root = ui
 }
 
-g:clear()
-g:render()
-local x, y = term.getSize()
-term.setCursorPos(1, y - 1)
+if true then
+  g:clear()
+  g:render()
+else
+  while true do
+    g:clear()
+    g.root = (g.root == ui and ui2) or ui
+    g:render()
+    sleep(0.1)
+  end
+end

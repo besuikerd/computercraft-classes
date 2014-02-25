@@ -21,7 +21,7 @@ function GlassesRenderer:__construct(bridge, scale)
 end
 
 function GlassesRenderer:box(x, y, width, height, color, opacity)
-  self.bridge.addBox((x - 1) * self.scale, (y - 1) * self.scale * GlassesRenderer.correctionY, width * self.scale, height * self.scale * GlassesRenderer.correctionY, GlassesRenderer.color[color], opacity or 0.8)
+  self.bridge.addBox((x - 1) * self.scale, (y - 1) * self.scale * GlassesRenderer.correctionY, width * self.scale, height * self.scale * GlassesRenderer.correctionY, GlassesRenderer.color[color], opacity or 1)
 end
 
 function GlassesRenderer:text(x, y, text, color, bgColor)

@@ -8,8 +8,6 @@
 setmetatable(_G, {
   __index = function(table, key)
     return function(...)
-      print(key)
-      print(textutils.serialize({...}))
       shell.run(key.." "..(foldl({...}, function(f, s) return (tostring(f) or "").." "..(tostring(s) or "") end) or ""))
     end
   end

@@ -71,18 +71,27 @@ function FileLogger:doLog(level, msg, ...)
   handle.close()
 end
 
-class "MultiLogger" :extends(Logger)
+class "CompositeLogger" :extends(Logger)
 
-function MultiLogger:__construct(level, file)
-  FileLogger.__construct(self, level)
+function CompositeLogger:__construct(loggers)
+  if type(loggers) ~= "table" then error("constructor argument of CompositeLogger must be a table of loggers") end
+  self.loggers = loggers
 end
 
-function MultiLogger:doLog(level, msg, ...)
-  Logger.doLog(self, level, msg, ...)
-  FileLogger.doLog(self, level, msg, ...)
+function CompositeLogger:log(level, msg, ...)
+  local args = {...}
+  deepMap(self.loggers, function(logger) logger:log(level, msg, unpack(args)) end)
 end
 
-__logger = MultiLogger:new("logs/global")
+function CompositeLogger:doLog(level, msg, ...)
+  local args = {...}
+  deepMap(self.loggers, function(logger) logger:doLog(level, msg, unpack(args))  end)
+end
+
+__logger = CompositeLogger:new{
+  FileLogger:new("logs/global", Logger.Level.DEBUG),
+  Logger:new(Logger.Level.DEBUG)
+}
 
 function log(level, msg, ...)
   __logger:log(level, msg, ...)
@@ -102,4 +111,9 @@ end
 
 function debug(msg, ...)
   log(Logger.Level.DEBUG, msg, ...)
+end
+
+logger = {}
+logger.setLevel = function(level)
+  __logger.level = level
 end

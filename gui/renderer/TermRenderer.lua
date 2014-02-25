@@ -20,13 +20,11 @@ function TermRenderer:__construct(monitor)
   else
    self.monitor = term
 	end
-	
 end
 
 function TermRenderer:box(x, y, width, height, color, opacity)
 	local monitor = self.monitor
-	
-	monitor.setBackgroundColor(color)
+	if monitor.isColor() then monitor.setBackgroundColor(color) end
 	--draw box pixels
 	for i=1, width do
 		for j=1, height do
@@ -34,17 +32,25 @@ function TermRenderer:box(x, y, width, height, color, opacity)
 			monitor.write(" ")
 		end
 	end
-	monitor.setBackgroundColor(COLOR_BG) --restore default bg color
+	if monitor.isColor() then monitor.setBackgroundColor(COLOR_BG) end --restore default bg color
+	self:cursorDown()
 end
 
 function TermRenderer:text(x, y, text, color, bgColor)
 	local monitor = self.monitor
-	monitor.setTextColor(color or COLOR_TEXT)
-	monitor.setBackgroundColor(bgColor or COLOR_BG)
+	if monitor.isColor() then
+  	monitor.setTextColor(color or COLOR_TEXT)
+  	monitor.setBackgroundColor(bgColor or COLOR_BG)
+	end
+	
 	monitor.setCursorPos(x, y)
 	monitor.write(text)
-	monitor.setTextColor(COLOR_TEXT) --reset default text color
-	monitor.setBackgroundColor(COLOR_BG) -- reset default bg color
+	
+	if monitor.isColor() then
+  	monitor.setTextColor(COLOR_TEXT) --reset default text color
+  	monitor.setBackgroundColor(COLOR_BG) -- reset default bg color
+	 end
+	self:cursorDown()
 end
 
 function TermRenderer:size()
@@ -53,6 +59,14 @@ end
 
 function TermRenderer:clear()
   local monitor = self.monitor
-  monitor.setBackgroundColor(colors.black)
+  if monitor.isColor() then monitor.setBackgroundColor(colors.black) end
   monitor.clear()
+  self:cursorDown()
+end
+
+function TermRenderer:cursorDown()
+  if self.monitor == term then
+    local x, y = self.monitor:getSize()
+    self.monitor.setCursorPos(1, y)
+  end
 end
