@@ -20,7 +20,15 @@ local slot_chest = 1
 local slot_chunks = 2
 local slot_fence = 3
 
-
+function ensureFences()
+  if turtle.getItemCount(slot_fence) == 0 then
+    turtle.forcePlaceDown(slot_chest)
+    turtle.select(slot_fence)
+    while not turtle.suckDown() do end
+    turtle.select(slot_chest)
+    turtle.digDown()
+  end
+end
 
 local chunker = Chunker:new("up", slot_chunks)
 
@@ -39,12 +47,3 @@ for i=1,4 do --a square has four sides
   dirFunction()
 end
 
-function ensureFences()
-  if turtle.getItemCount(slot_fence) == 0 then
-    turtle.forcePlaceDown(slot_chest)
-    turtle.select(slot_fence)
-    while not turtle.suckDown() do end
-    turtle.select(slot_chest)
-    turtle.digDown()
-  end
-end
