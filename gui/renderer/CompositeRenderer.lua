@@ -22,13 +22,17 @@ function Renderer:text(x, y, text, color, bgColor) end
 
 
 function Renderer:size() 
-  local maxX, maxY
+  local minX = 9999999 
+  local minY = 9999999
   deepMap(self.renderers, function(renderer)
-    local x, y = renderer:size()
-    if x > maxX then maxX = x end
-    if y > maxY then maxY = y end
+    if renderer:getClass().__name ~= "GlassesRenderer" then
+      local x, y = renderer:size()
+      if x < minX then minX = x end
+      if y < minY then minY = y end
+    else
+    end
   end)
-  return maxX, maxY
+  return minX, minY
 end
 
 function Renderer:clear() 

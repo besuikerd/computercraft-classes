@@ -194,7 +194,7 @@ end
 	* when not found, throw an error
 	* execute classloading
 ]]
-function ClassLoader:load(cls)
+function ClassLoader:load(cls, doRun)
   --print(string.format("loading class: %s", cls)) 
 	--check if class was already loaded before
 	if not self.loadedClasses[cls] then
@@ -226,7 +226,7 @@ function ClassLoader:load(cls)
 			end
 			
 			if response.getResponseCode() == 200 then 
-				return self:loadClass(cls, response.readAll())
+				return self:loadClass(cls, response.readAll(), doRun)
 			else
 			  for i,j in pairs(response) do
 			   print(i)
@@ -236,13 +236,13 @@ function ClassLoader:load(cls)
 	end
 end
 
-function ClassLoader:loadClass(name, cls)
+function ClassLoader:loadClass(name, cls, doRun)
 
 	self.loadedClasses[name], e = loadstring(cls)
 	if not self.loadedClasses[name] then error(string.format("Unable to load class %s: %s", name, e)) end
 	
 	--execute class
-	self.loadedClasses[name]()
+	if doRun ~= false then self.loadedClasses[name]() end
 	local path = string.gsub(name, "%.", "/")
 	
 	if not fs.exists(path) or self.force then
@@ -272,7 +272,7 @@ end
 _G["class"] = class
 _G["classloader"] = ClassLoader:new()
 _G["force_load"] = function(force) classloader.force = force end
-_G["import"] = function(cls) classloader:load(cls) end
+_G["import"] = function(cls, doRun) classloader:load(cls, doRun) end
 
 
 local old_force = classloader.force
@@ -284,5 +284,7 @@ import "core.Functional"
 import "core.Table"
 import "core.Logger"
 import "core.Fs"
+import "core.Turtle"
+import "core.Persistance"
 
 force_load(old_force)

@@ -2,7 +2,6 @@ import "gui.renderer.Renderer"
 
 class "GlassesRenderer" :extends(Renderer)
 
-
 function GlassesRenderer:__construct(bridge, scale)
   if bridge then
     if type(bridge) == "string" then
@@ -21,7 +20,10 @@ function GlassesRenderer:__construct(bridge, scale)
 end
 
 function GlassesRenderer:box(x, y, width, height, color, opacity)
-  self.bridge.addBox((x - 1) * self.scale, (y - 1) * self.scale * GlassesRenderer.correctionY, width * self.scale, height * self.scale * GlassesRenderer.correctionY, GlassesRenderer.color[color], opacity or 1)
+--debug("y: %.2f <=> %d",(y - 1) * self.scale * GlassesRenderer.correctionY, math.ceil((y - 1) * self.scale * GlassesRenderer.correctionY))
+--debug("height: %.2f <=> %d", (height * self.scale * GlassesRenderer.correctionY), math.ceil(height * self.scale * GlassesRenderer.correctionY))
+
+  self.bridge.addBox((x - 1) * self.scale, math.ceil((y - 1) * self.scale * GlassesRenderer.correctionY), width * self.scale, math.ceil(height * self.scale * GlassesRenderer.correctionY), GlassesRenderer.color[color], opacity or 1)
 end
 
 function GlassesRenderer:text(x, y, text, color, bgColor)
@@ -30,14 +32,15 @@ function GlassesRenderer:text(x, y, text, color, bgColor)
 end
 
 function GlassesRenderer:size()
-  return self.scale * 220, self.scale * 140
+  return 30, 20
 end
 
 function GlassesRenderer:clear()
   self.bridge.clear()
 end
 
-GlassesRenderer.correctionY = 11 / 7
+--correction seems to be working better at 1.5 instead of 11/7 due to rounding issues
+GlassesRenderer.correctionY = 1.5
 
 --maps terminal colors to terminal glasses api colors
 GlassesRenderer.color = {}

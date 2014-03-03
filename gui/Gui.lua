@@ -15,7 +15,7 @@ end
 
 function Gui:render()
   self.root:update(self.model)
-  self.root:dimension(self.model)
+  self.root:dimension(self.renderer, self.model)
   self.root:draw(self.renderer, self.model)
 end
 

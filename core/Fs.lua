@@ -5,8 +5,9 @@ function fs.precedingPath(p)
   end
 end
 
+
 function fs.precedingPathExists(p)
-  return fs.exists(fs.precedingPath(p))
+  return fs.exists(fs.precedingPath(p) or p)
 end
 
 function fs.mkPrecedingPath(path)

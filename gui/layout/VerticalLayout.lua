@@ -22,13 +22,13 @@ function VerticalLayout:layout(element, index)
     self.yOffset = element.parent.paddingTop
     self.xOffset = self.xOffset + element:paddedWidth() + self.marginX
     self.maxWidth = element.width
-  elseif element.width > self.maxWidth then 
-    self.maxWidth = element.width
+  elseif element:paddedWidth() > self.maxWidth then 
+    self.maxWidth = element:paddedWidth()
   end
   
-  element.x = self.xOffset
-  element.y = self.yOffset
-  self.yOffset = self.yOffset + element.height + (#element.parent.elements == index and 0 or self.marginY) --increment y offset
+  element.x = self.xOffset + element.paddingLeft
+  element.y = self.yOffset + element.paddingTop
+  self.yOffset = self.yOffset + element:paddedHeight() + (#element.parent.elements == index and 0 or self.marginY) --increment y offset
 end
 
 function VerticalLayout:laidOutDimensions()

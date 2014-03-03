@@ -3,14 +3,16 @@ import "gui.widget.Box"
 import "gui.widget.Square"
 import "gui.widget.Text"
 import "gui.widget.Label"
+import "gui.widget.Border"
+import "gui.widget.Menu"
 import "gui.renderer.CompositeRenderer"
 import "gui.renderer.TermRenderer"
 import "gui.renderer.GlassesRenderer"
 import "gui.layout.HorizontalLayout"
 
-
-ui2 = Box:new{
+ui3 = Box:new{
   bgColor = colors.green,
+  padding=1,
   layout = HorizontalLayout:new(),
   elements = {
   
@@ -32,23 +34,29 @@ ui2 = Box:new{
   }
 }
 
-ui = Box:new{
-  dimensionX = Widget.Dimension.ABSOLUTE,
-  dimensionY = Widget.Dimension.ABSOLUTE,
+ui2 = Box:new{
   width = 20,
   height = 15,
   bgColor = colors.cyan,
   elements = {
-    Square:new(11, 7, colors.red),
-    Label:new{
-      bgColor = colors.blue,
-      text = gui.dynamic("someString")
-    }
+    Square:new(11, 3, colors.red):padding(1),
+    Border:new({1,20,1,1}, colors.gray, 
+      Label:new{
+        padding=3,
+        bgColor = colors.blue,
+        text = gui.dynamic("someString")
+      }
+    )
   }
 }
 
+ui = Menu:new{
+  items = {"first", "second", "third"},
+  bgColor = colors.blue,
+}
+
 model = {
-  someString = "start"
+  someString = "starts"
 }
 
 g = Gui:new{
@@ -62,12 +70,8 @@ g = Gui:new{
 }
 
 if true then
-  while true do
   g:clear()
-  model.someString = math.random(1, 100)
   g:render()
-  sleep(1)
-  end
 else
   while true do
     g:clear()

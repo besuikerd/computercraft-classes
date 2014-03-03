@@ -37,3 +37,8 @@ function shallowcopy(table)
   end
   return result
 end
+
+function rep(f, amount)
+  for i=1, amount and amount - 1 or 0 do f() end
+  return f()
+end

@@ -3,7 +3,7 @@ import "gui.widget.Widget"
 class "Square" :extends(Widget)
 
 function Square:__construct(width, height, color)
-  self.__super:__construct()
+  Widget.__construct(self)
   self.width = width
   self.height = height
   self.color = color
